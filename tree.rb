@@ -16,9 +16,9 @@ Tree = Struct.new(:data) do
     parent[:nodes] << { sequence: element[:sequence], nodes: [] }
   end
 
-  def rightmost_child_at_level(traversals_remaining, location)
-    return location if traversals_remaining.zero?
-    rightmost_child_at_level(traversals_remaining - 1, location[:nodes].last)
+  def rightmost_child_at_level(traversals_remaining, tree)
+    return tree if traversals_remaining.zero?
+    rightmost_child_at_level(traversals_remaining - 1, tree[:nodes].last)
   end
 end
 
