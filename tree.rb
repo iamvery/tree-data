@@ -1,6 +1,40 @@
 Tree = Struct.new(:data) do
   def parse
-    # make the tests pass
+    def build_intermediate_node(parent, level, sequence)
+        # Intermediate node tracks parent and level directly in the node.
+        # We'll strip out this book-keeping data later.
+        {parent: parent, level: level, sequence: sequence, children: []}
+    end
+
+    root = build_intermediate_node(nil, 0, :root)
+    current = root
+    data.each do |item|
+        item_level = item[:level]
+        while current[:level] >= item_level do
+            current = current[:parent]
+        end
+        item_node = build_intermediate_node(current, item_level, item[:sequence])
+        current[:children] << item_node
+        current = item_node
+    end
+
+    # Here's where we strip out the book-keeping data and rename
+    # :children to :nodes.
+    tree = project_final_tree(root)
+
+    # The expected return value is actually a forest (list of trees),
+    # not a tree in itself. We get that by decapitating the tree -
+    # grab the children of the root, and pitch out the root node.
+    tree[:nodes]
+  end
+
+  def project_final_tree(tree)
+    # Note that this is currently recursive, so it might overflow the stack.
+    # It could be transformed to a while loop and the book-keeping data
+    # moved from the stack to an explicit data structure to avoid that.
+    { sequence: tree[:sequence], nodes: tree[:children].map do |tree|
+        project_final_tree(tree)
+      end}
   end
 end
 
