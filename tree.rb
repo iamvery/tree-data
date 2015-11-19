@@ -1,5 +1,4 @@
 Tree = Struct.new(:data) do
-
   def parse
     tree = { nodes: [] }
     build_tree(tree, data)
