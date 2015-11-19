@@ -1,6 +1,24 @@
 Tree = Struct.new(:data) do
   def parse
-    # make the tests pass
+    build_tree[:nodes]
+  end
+
+  def build_tree(tree = { nodes: [] }, list = data)
+    element, *tail = list
+    add_node(tree, element)
+    build_tree(tree, tail) if tail.length > 0
+    tree
+  end
+
+  def add_node(tree, element)
+    parent_level = element[:level] - 1
+    parent = find_location(parent_level, tree)
+    parent[:nodes] << { sequence: element[:sequence], nodes: [] }
+  end
+
+  def find_location(traversals_remaining, location)
+    return location if traversals_remaining.zero?
+    find_location(traversals_remaining - 1, location[:nodes].last)
   end
 end
 
