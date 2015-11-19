@@ -29,12 +29,40 @@ Tree = Struct.new(:data) do
   end
 
   def project_final_tree(tree)
-    # Note that this is currently recursive, so it might overflow the stack.
-    # It could be transformed to a while loop and the book-keeping data
-    # moved from the stack to an explicit data structure to avoid that.
-    { sequence: tree[:sequence], nodes: tree[:children].map do |tree|
-        project_final_tree(tree)
-      end}
+    # updated during the tree walk
+    final_tree = nil
+
+    # worklist - tracks the state we need to rewrite the tree
+    frontier = [{converted_parent: nil, children: [tree]}]
+    while frontier.size > 0
+        # walk the tree breadth-first (.pop would be depth-first)
+        item = frontier.shift
+        parent = item[:converted_parent]
+        children = item[:children]
+
+        children.each do |child|
+            # rewrite the child to the final-tree form
+            converted = { sequence: child[:sequence], nodes: [] }
+
+            # add the child's own children to the frontier,
+            # so we process them eventually
+            frontier << {
+                converted_parent: converted,
+                children: child[:children]
+                }
+
+            if parent then
+                # add the converted node to the final tree we're in
+                # the middle of building
+                parent[:nodes] << converted
+            else
+                # no parent, so it must be the root
+                # save a reference so we can return it from the method
+                final_tree = converted
+            end
+        end
+    end
+    final_tree
   end
 end
 
