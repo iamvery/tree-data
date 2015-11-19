@@ -30,6 +30,8 @@ RSpec.describe Tree do
         { level: 1, sequence: 6 },
         { level: 2, sequence: 7 },
         { level: 2, sequence: 8 },
+        { level: 3, sequence: 9 },
+        { level: 2, sequence: 10 },
       ]
 
       tree = described_class.new(data)
@@ -52,7 +54,13 @@ RSpec.describe Tree do
           sequence: 6,
           nodes: [
             { sequence: 7, nodes: [] },
-            { sequence: 8, nodes: [] },
+            {
+              sequence: 8,
+              nodes: [
+                { sequence: 9, nodes: [] },
+              ],
+            },
+            { sequence: 10, nodes: [] },
           ],
         }
       ])
