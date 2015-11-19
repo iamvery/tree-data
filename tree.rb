@@ -24,9 +24,9 @@ RSpec.describe Tree do
       data = [
         { level: 1, sequence: 1 },
         { level: 2, sequence: 2 },
-        { level: 3, sequence: 3 },
+        { level: 2, sequence: 3 },
         { level: 3, sequence: 4 },
-        { level: 2, sequence: 5 },
+        { level: 3, sequence: 5 },
         { level: 1, sequence: 6 },
         { level: 2, sequence: 7 },
         { level: 2, sequence: 8 },
@@ -38,14 +38,14 @@ RSpec.describe Tree do
         {
           sequence: 1,
           nodes: [
+            { sequence: 2, nodes: [] },
             {
-              sequence: 2,
+              sequence: 3,
               nodes: [
-                { sequence: 3, nodes: [] },
                 { sequence: 4, nodes: [] },
+                { sequence: 5, nodes: [] },
               ],
             },
-            { sequence: 5, nodes: [] },
           ],
         },
         {
