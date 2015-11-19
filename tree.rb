@@ -12,13 +12,13 @@ Tree = Struct.new(:data) do
 
   def add_node(tree, element)
     parent_level = element[:level] - 1
-    parent = rightmost_child_at_level(parent_level, tree)
+    parent = rightmost_child_at_level(tree, parent_level)
     parent[:nodes] << { sequence: element[:sequence], nodes: [] }
   end
 
-  def rightmost_child_at_level(traversals_remaining, tree)
+  def rightmost_child_at_level(tree, traversals_remaining)
     return tree if traversals_remaining.zero?
-    rightmost_child_at_level(traversals_remaining - 1, tree[:nodes].last)
+    rightmost_child_at_level(tree[:nodes].last, traversals_remaining - 1)
   end
 end
 
