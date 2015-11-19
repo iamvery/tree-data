@@ -4,15 +4,15 @@ Tree = Struct.new(:data) do
   end
 
   def build_tree(tree = { nodes: [] }, list = data)
-    node, *tail = list
-    location = find_location(node[:level] - 1, tree)
-    add_node(location, node)
+    element, *tail = list
+    location = find_location(element[:level] - 1, tree)
+    add_node(location, element)
     build_tree(tree, tail) if tail.length > 0
     return tree
   end
 
-  def add_node(location, node)
-    location[:nodes] << { sequence: node[:sequence], nodes: [] }
+  def add_node(location, element)
+    location[:nodes] << { sequence: element[:sequence], nodes: [] }
   end
 
   def find_location(traversals_remaining, location)
