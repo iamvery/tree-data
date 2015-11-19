@@ -1,11 +1,9 @@
 Tree = Struct.new(:data) do
   def parse
-    tree = { nodes: [] }
-    build_tree(tree, data)
-    tree[:nodes]
+    build_tree[:nodes]
   end
 
-  def build_tree(tree, list)
+  def build_tree(tree = { nodes: [] }, list = data)
     node, *tail = list
     location = find_location(node[:level] - 1, tree)
     add_node(location, node)
