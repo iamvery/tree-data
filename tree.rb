@@ -11,8 +11,8 @@ Tree = Struct.new(:data) do
   end
 
   def add_node(tree, element)
-    location = find_location(element[:level] - 1, tree)
-    location[:nodes] << { sequence: element[:sequence], nodes: [] }
+    parent = find_location(element[:level] - 1, tree)
+    parent[:nodes] << { sequence: element[:sequence], nodes: [] }
   end
 
   def find_location(traversals_remaining, location)
