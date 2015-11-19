@@ -1,6 +1,38 @@
 Tree = Struct.new(:data) do
+  def make_node(ent)
+    { sequence: ent[:sequence], nodes: [] }
+  end
+
+  # Walks back up a prepared stack, forming the tree at each level.
+  def collapse(stack, level)
+    # Iterate the difference between the last tree level and this level.
+    (stack.length - level).times do |idx|
+      # Pop a leaf at a time.
+      leaf = stack.pop
+      # Append the leafs to the parent node.
+      stack[-1][-1][:nodes] = leaf
+    end
+    stack
+  end
+
   def parse
-    # make the tests pass
+    stack = []
+    data.each do |ent|
+      node = make_node(ent)
+      level = ent[:level]
+
+      # Collapse all leafs below the current level
+      collapse(stack, level)    if stack.length > level
+
+      # Add an empty level
+      stack     << []           if stack.length < level
+
+      # stack.length must equal level at this point, so just add our node.
+      stack[-1] << node
+    end
+
+    # Final collapse, should result in [[:tree]]
+    return collapse(stack, 1).pop
   end
 end
 
