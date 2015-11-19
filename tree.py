@@ -23,26 +23,36 @@ test_trees = [
         (2, 8 ),
     ]
     ]
-def parse_tree(tree_list):
-    working_list = list(tree_list)
-    window = [None]
 
-    toplevel_nodes = []
+class TreeParser:
+    first = None
+    second = None
+    working_list = None
 
-    def chomp():
-        if not working_list: 
-            return None, None
+    def __init__(self, node_list):
+        self.working_list = list(node_list)
+
+    def chomp(self):
+        if not self.working_list: 
+            first = second = None
         
-        first = working_list[0]
-        del working_list[0]
-        second = working_list[0] if working_list else None
-        window[0] = first, second
+        self.first = self.working_list[0]
+        del self.working_list[0]
+        self.second = self.working_list[0] if self.working_list else None
 
-    def parse(level, curr_nodes):
-        first, second = window[0]
+    def parse_tree(self):
+        self.chomp()
+        toplevel_nodes = []
+        initial_level = -sys.maxint - 1
+            
+        self.parse(initial_level, toplevel_nodes)
 
-        while first:
-            first_level, first_data = first
+        return toplevel_nodes
+
+    def parse(self, level, curr_nodes):
+
+        while self.first:
+            first_level, first_data = self.first
 
             if first_level <= level:
                 # means we need to pop the stack.
@@ -53,33 +63,24 @@ def parse_tree(tree_list):
             curr_nodes.append(new_node)
 
             # what next?
-            if not second: 
+            if not self.second: 
                 return
-            second_level, second_data = second
+            second_level, second_data = self.second
 
             if second_level > first_level:
-                # parse first's nodes
-                chomp()
-                parse(first_level, first_nodes)
-                first, second = window[0]
+                # first has children, so parse them
+                self.chomp()
+                self.parse(first_level, first_nodes)
             elif second_level == first_level:
-                # keep going at this level
-                chomp()
-                first, second = window[0]
+                # first has no children, more nodes at this level
+                self.chomp()
                 continue
             elif second_level < first_level:
-                chomp()
-                first, second = window[0]
+                # done with this level, so return
+                self.chomp()
                 return
-
-
-    chomp()
-    initial_level = -sys.maxint - 1
-
-    parse(initial_level, toplevel_nodes)
-
-    return toplevel_nodes
 
 for tree in test_trees:
     print tree
-    print parse_tree(tree)
+    parser = TreeParser(tree)
+    print parser.parse_tree()
