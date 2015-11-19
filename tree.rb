@@ -8,7 +8,7 @@ Tree = Struct.new(:data) do
     location = find_location(element[:level] - 1, tree)
     add_node(location, element)
     build_tree(tree, tail) if tail.length > 0
-    return tree
+    tree
   end
 
   def add_node(location, element)
