@@ -1,6 +1,21 @@
 Tree = Struct.new(:data) do
-  def parse
-    # make the tests pass
+  def parse(nodes = data)
+    return [] if nodes.empty?
+
+    parent_node = nodes.first
+    parent_nodes = nodes.select { |node| node[:level] == parent_node[:level] }
+
+    node_families = parent_nodes.map do |parent_node|
+      parent_node_index = nodes.index(parent_node)
+      remaining_nodes = nodes[(parent_node_index + 1)..-1]
+      descendant_nodes = remaining_nodes.take_while { |node| node[:level] > parent_node[:level] }
+
+      [parent_node, descendant_nodes]
+    end
+
+    node_families.map do |parent_node, descendant_nodes|
+      { sequence: parent_node[:sequence], nodes: parse(descendant_nodes) }
+    end
   end
 end
 
