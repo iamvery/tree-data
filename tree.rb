@@ -17,7 +17,7 @@ Tree = Struct.new(:data) do
   end
 
   def find_location(traversals_remaining, location)
-    return location if traversals_remaining == 0
+    return location if traversals_remaining.zero?
     find_location(traversals_remaining - 1, location[:nodes].last)
   end
 end
