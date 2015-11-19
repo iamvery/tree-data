@@ -5,8 +5,8 @@ Tree = Struct.new(:data) do
     tree[:nodes]
   end
 
-  def build_tree(tree, data)
-    node, *tail = data
+  def build_tree(tree, list)
+    node, *tail = list
     location = find_location(node[:level] - 1, tree)
     add_node(location, node)
     build_tree(tree, tail) if tail.length > 0
