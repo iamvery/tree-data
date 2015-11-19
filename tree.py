@@ -73,7 +73,6 @@ class TreeParser:
                 # first has no children, more nodes at this level
                 continue
             elif next_level < first_level:
-                print 'C'
                 # done with this level, so return
                 return
 
