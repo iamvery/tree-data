@@ -25,7 +25,7 @@ test_trees = [
     ]
 
 class TreeParser:
-    first = None
+    curr = None
     working_list = None
 
     def __init__(self, node_list):
@@ -33,9 +33,9 @@ class TreeParser:
 
     def chomp(self):
         if not self.working_list: 
-            self.first = None
+            self.curr = None
         else:
-            self.first = self.working_list[0]
+            self.curr = self.working_list[0]
             del self.working_list[0]
 
     def parse_tree(self):
@@ -47,32 +47,32 @@ class TreeParser:
 
         return toplevel_nodes
 
-    def parse(self, level, curr_nodes):
-        while self.first:
-            first_level, first_data = self.first
+    def parse(self, parent_level, parent_nodes):
+        while self.curr:
+            curr_level, first_data = self.curr
 
-            if first_level <= level:
+            if curr_level <= parent_level:
                 # means we need to pop the stack.
                 return
 
             first_nodes = []
             new_node = (first_data, first_nodes)
-            curr_nodes.append(new_node)
+            parent_nodes.append(new_node)
 
             # what next?
             self.chomp()
-            if not self.first: 
+            if not self.curr: 
                 # nothing left to do
                 return
-            next_level, next_data = self.first
+            next_level, next_data = self.curr
 
-            if next_level > first_level:
-                # first has children, so parse them
-                self.parse(first_level, first_nodes)
-            elif next_level == first_level:
-                # first has no children, more nodes at this level
+            if next_level > curr_level:
+                # curr has children, so parse them
+                self.parse(curr_level, first_nodes)
+            elif next_level == curr_level:
+                # curr has no children, more nodes at this level
                 continue
-            elif next_level < first_level:
+            elif next_level < curr_level:
                 # done with this level, so return
                 return
 
