@@ -17,8 +17,7 @@ Tree = Struct.new(:data) do
   end
 
   def rightmost_child_at_level(tree, traversals_remaining)
-    return tree if traversals_remaining.zero?
-    rightmost_child_at_level(tree[:nodes].last, traversals_remaining - 1)
+    traversals_remaining.times.reduce(tree) { |c| c[:nodes].last }
   end
 end
 
