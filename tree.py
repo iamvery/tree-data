@@ -26,7 +26,6 @@ test_trees = [
 
 class TreeParser:
     first = None
-    second = None
     working_list = None
 
     def __init__(self, node_list):
@@ -34,13 +33,10 @@ class TreeParser:
 
     def chomp(self):
         if not self.working_list: 
-            self.first = self.second = None
+            self.first = None
         else:
             self.first = self.working_list[0]
             del self.working_list[0]
-            self.second = self.working_list[0] if self.working_list else None
-
-        print 'Chomp:', (self.first, self.second)
 
     def parse_tree(self):
         self.chomp()
@@ -52,7 +48,6 @@ class TreeParser:
         return toplevel_nodes
 
     def parse(self, level, curr_nodes):
-
         while self.first:
             first_level, first_data = self.first
 
@@ -61,24 +56,22 @@ class TreeParser:
                 return
 
             first_nodes = []
-            print "Adding node:", first_data, 'level:', level
             new_node = (first_data, first_nodes)
             curr_nodes.append(new_node)
 
             # what next?
             self.chomp()
             if not self.first: 
-                print 'D'
+                # nothing left to do
                 return
             next_level, next_data = self.first
 
             if next_level > first_level:
-                print 'A'
                 # first has children, so parse them
                 self.parse(first_level, first_nodes)
             elif next_level == first_level:
-                print 'B'
                 # first has no children, more nodes at this level
+                continue
             elif next_level < first_level:
                 print 'C'
                 # done with this level, so return
