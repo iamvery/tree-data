@@ -5,13 +5,13 @@ Tree = Struct.new(:data) do
 
   def build_tree(tree = { nodes: [] }, list = data)
     element, *tail = list
-    location = find_location(element[:level] - 1, tree)
-    add_node(location, element)
+    add_node(tree, element)
     build_tree(tree, tail) if tail.length > 0
     tree
   end
 
-  def add_node(location, element)
+  def add_node(tree, element)
+    location = find_location(element[:level] - 1, tree)
     location[:nodes] << { sequence: element[:sequence], nodes: [] }
   end
 
