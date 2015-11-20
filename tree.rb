@@ -1,6 +1,26 @@
+
+
 Tree = Struct.new(:data) do
+
   def parse
-    # make the tests pass
+    build_tree[:nodes]
+  end
+
+  def build_tree(tree = { nodes: [] }, list = data)
+    node, *tail = list
+    add_node(tree, node)
+    build_tree(tree, tail) if tail.length > 0
+    return tree
+  end
+
+  def add_node(tree, node)
+    parent_level = node[:level] - 1
+    sub_tree = rightmost_child_at_level(tree, parent_level)
+    sub_tree[:nodes] << { sequence: node[:sequence], nodes: [] }
+  end
+
+  def rightmost_child_at_level(sub_tree, traversals_remaining)
+    traversals_remaining.times.reduce(sub_tree) { |sub_tree| sub_tree[:nodes].last }
   end
 end
 
