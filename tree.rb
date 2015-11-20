@@ -1,26 +1,26 @@
+
+
 Tree = Struct.new(:data) do
 
   def parse
-    tree = { nodes: [] }
-    build_tree(tree, data)
-    tree[:nodes]
+    build_tree[:nodes]
   end
 
-  def build_tree(tree, data)
-    node, *tail = data
-    location = find_location(node[:level] - 1, tree)
-    add_node(location, node)
+  def build_tree(tree = { nodes: [] }, list = data)
+    node, *tail = list
+    add_node(tree, node)
     build_tree(tree, tail) if tail.length > 0
     return tree
   end
 
-  def add_node(location, node)
-    location[:nodes] << { sequence: node[:sequence], nodes: [] }
+  def add_node(tree, node)
+    parent_level = node[:level] - 1
+    sub_tree = rightmost_child_at_level(tree, parent_level)
+    sub_tree[:nodes] << { sequence: node[:sequence], nodes: [] }
   end
 
-  def find_location(traversals_remaining, location)
-    return location if traversals_remaining == 0
-    find_location(traversals_remaining - 1, location[:nodes].last)
+  def rightmost_child_at_level(sub_tree, traversals_remaining)
+    traversals_remaining.times.reduce(sub_tree) { |sub_tree| sub_tree[:nodes].last }
   end
 end
 
