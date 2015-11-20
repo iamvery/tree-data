@@ -11,17 +11,15 @@ class Tree
     node[:nodes] = [] unless node.key?(:nodes)
     parent[:nodes] << node unless parent[:nodes].include?(node)
     return parent if @look_ahead.nil?
+    return if node[:level] > @look_ahead[:level]
+    next_node = @look_ahead
     if (node[:level] == @look_ahead[:level])
-      next_node = @look_ahead
       @look_ahead = @data.pop
       parse_node(parent, next_node)
     elsif node[:level] < @look_ahead[:level]
-      next_node = @look_ahead
       @look_ahead = @data.pop
       parse_node(node, next_node)
       parse_node(parent, node)
-    elsif node[:level] > @look_ahead[:level]
-      return
     end
     parent[:nodes]
   end
